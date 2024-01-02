@@ -9,7 +9,7 @@ touch $out/$bname.txt
 for i in `seq 1 $songs`; do
   wav=$out/${bname}_$i.wav
   wine ~/Downloads/nsfplay/nsfplay.exe $file $wav $i
-  ffmpeg -i $wav $out/$bname_$i.mp3
-  echo file "'"$bname_$i.mp3"'" >> $out/$bname.txt
+  ffmpeg -i $wav $out/${bname}_$i.mp3
+  echo file "'"${bname}_$i.mp3"'" >> $out/$bname.txt
 done
 ffmpeg -f concat -i $out/$bname.txt -c copy "done"/$bname.mp3
