@@ -7,11 +7,14 @@ mkdir -p $out cmds
 bname=$(basename $file | sed 's/\.nsf$//')
 touch $out/$bname.txt
 for i in `seq 1 $songs`; do
-  wav="$out/${bname}_$i.wav"
-  echo wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" >> cmds/nsfplay_commands.txt
-  echo ffmpeg -y -i \"$wav\" -c:a libopus -b:a 128k \"$out/${bname}_$i.opus\" >> cmds/ffmpeg_commands.txt
-  #ffmpeg -i "$wav" "$out/${bname}_$i.mp3"
-  #echo file "'"${bname}_$i.mp3"'" >> $out/$bname.txt
+  ifmt=$(printf "%02d" $i)
+  wav="$out/${bname}_$ifmt.wav"
+  echo -n wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" ' && ' >> cmds/commands.txt
+  echo ffmpeg -y -i \"$wav\" -c:a libopus -b:a 128k \"$out/${bname}_${ifmt}.opus\" >> cmds/commands.txt
+  #echo wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" >> cmds/nsfplay_commands.txt
+  #echo ffmpeg -y -i \"$wav\" -c:a libopus -b:a 128k \"$out/${bname}_${ifmt}.opus\" >> cmds/ffmpeg_commands.txt
+  #ffmpeg -i "$wav" "$out/${bname}_${ifmt}.mp3"
+  #echo file "'"${bname}_${ifmt}.mp3"'" >> $out/$bname.txt
 done
 #ffmpeg -f concat -i $out/$bname.txt -c copy "done"/$bname.mp3
 
