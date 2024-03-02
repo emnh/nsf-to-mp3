@@ -10,7 +10,7 @@ for i in `seq 1 $songs`; do
   wav="$out/${bname}_$i.wav"
   wine ~/Downloads/nsfplay/nsfplay.exe "$file" "$wav" "$i"
   #ffmpeg -i "$wav" "$out/${bname}_$i.mp3"
-  ffmpeg -i "$wav" -c:a libopus -b:a 128k "$out/${bname}_$i.opus"
+  ffmpeg -y -i "$wav" -c:a libopus -b:a 128k "$out/${bname}_$i.opus"
   echo file "'"${bname}_$i.mp3"'" >> $out/$bname.txt
 done
 #ffmpeg -f concat -i $out/$bname.txt -c copy "done"/$bname.mp3
