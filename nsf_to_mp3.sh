@@ -21,4 +21,5 @@ done
 # Run this first
 # time ( for file in *.nsf; do ~/data/devel/nsf-to-mp3/nsf_to_mp3.sh $file; done )
 # Run this after
-# N=12; time ( ( cat cmds/nsfplay_commands.txt | parallel -j $N eval ) && ( cat cmds/ffmpeg_commands.txt| parallel -j $N eval ) )
+# N=12; time ( cat cmds/nsfplay_commands.txt | parallel -j $N eval )
+## N=12; time ( ( cat cmds/nsfplay_commands.txt | parallel -j $N eval ) && ( cat cmds/ffmpeg_commands.txt| parallel -j $N eval ) )
