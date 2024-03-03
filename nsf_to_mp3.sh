@@ -9,8 +9,10 @@ touch $out/$bname.txt
 for i in `seq 1 $songs`; do
   ifmt=$(printf "%02d" $i)
   wav="$out/${bname}_$ifmt.wav"
-  echo -n wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" ' && ' >> cmds/commands.txt
-  echo ffmpeg -y -i \"$wav\" -c:a libopus -b:a 128k \"$out/${bname}_${ifmt}.opus\" >> cmds/commands.txt
+  #echo -n wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" ' && ' >> cmds/commands.txt
+  echo -n "ffmpeg -y -i" \"$wav\" "-c:a libopus -b:a 128k " >> cmds/commands.txt
+  echo -n "-metadata" ARTIST=\"Nintendo\" -metadata ALBUM=\"Capcom\" "-metadata" TITLE=\"$bname\" "-metadata" TRACK="$i"" " >> cmds/commands.txt
+  echo \"$out/${bname}_${ifmt}.opus\" >> cmds/commands.txt
   #echo wine ~/Downloads/nsfplay/nsfplay.exe \"$file\" \"$wav\" \"$i\" >> cmds/nsfplay_commands.txt
   #echo ffmpeg -y -i \"$wav\" -c:a libopus -b:a 128k \"$out/${bname}_${ifmt}.opus\" >> cmds/ffmpeg_commands.txt
   #ffmpeg -i "$wav" "$out/${bname}_${ifmt}.mp3"
