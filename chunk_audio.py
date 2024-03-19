@@ -8,7 +8,8 @@ import concurrent.futures
 import subprocess
 import concurrent.futures
 
-def chunk_random_segment(opus_file, segment_length, speed_factor, temp_file):
+def chunk_random_segment(args):
+    opus_file, segment_length, speed_factor, temp_file = args
     # Convert Opus file to WAV
     wav_file = "temp_audio.wav"
     if os.path.exists(wav_file):
@@ -49,24 +50,12 @@ def pmap(func, args, num_processes):
         results = list(executor.map(func, args))
     return results
 
-if __name__ == "__main__":
-    # Define your list of arguments
-    arguments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-    # Number of processes to use
-    num_processes = 12
-
-    # Distribute the function over processes
-    results = pmap(my_function, arguments, num_processes)
-
-    print(results)
-
 def get_cpu_cores():
     return multiprocessing.cpu_count()
 
 def main():
     # Example usage
-    outdir = 'out_chunks'
+    outdir = 'out_chunks_2'
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     infnames = os.listdir()
@@ -89,3 +78,5 @@ def main():
             i += 1
             arguments.append(it)
     results = pmap(chunk_random_segment, arguments, num_processes)
+
+main()
