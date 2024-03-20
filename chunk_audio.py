@@ -9,13 +9,15 @@ import subprocess
 import concurrent.futures
 
 def chunk_random_segment(args):
-    opus_file, segment_length, speed_factor, temp_file = args
+    i, opus_file, segment_length, speed_factor, temp_file = args
     # Convert Opus file to WAV
-    temp_audio_file = "temp_audio.wav"
+    temp_audio_file = "temp_audio_" + str(i) + ".wav"
     if os.path.exists(temp_audio_file):
         os.remove(temp_audio_file)
-    atempo = '"atempo={speed_factor}"'
-    os.system(f"ffmpeg -i -filter {atempo} {opus_file} {temp_audio_file}")
+    atempo = f'"atempo={speed_factor}"'
+    cmd = f"ffmpeg -i {opus_file} -filter:a {atempo} {temp_audio_file}"
+    print("CMD", cmd)
+    os.system(cmd)
 
     # Load the WAV file
     audio = AudioSegment.from_file(temp_audio_file, format="wav")
@@ -75,7 +77,7 @@ def main():
             length = random.randrange(10000, 30000) # random.uniform(0.75, 4.25) * 1000
             speed_factor = random.randrange(1000, 2000) / 1000 # random.uniform(0.75, 4.25) * 1000
             title = os.path.splitext(fname)[0]
-            it = (fname, length, speed_factor, os.path.join(outdir, str(i) + '_' + title + '.mp3'))
+            it = (i, fname, length, speed_factor, os.path.join(outdir, str(i) + '_' + title + '.mp3'))
             i += 1
             arguments.append(it)
     results = pmap(chunk_random_segment, arguments, num_processes)
