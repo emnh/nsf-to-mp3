@@ -11,13 +11,14 @@ import concurrent.futures
 def chunk_random_segment(args):
     opus_file, segment_length, speed_factor, temp_file = args
     # Convert Opus file to WAV
-    wav_file = "temp_audio.wav"
-    if os.path.exists(wav_file):
-        os.remove(wav_file)
-    os.system(f"ffmpeg -i {opus_file} {wav_file}")
+    temp_audio_file = "temp_audio.wav"
+    if os.path.exists(temp_audio_file):
+        os.remove(temp_audio_file)
+    atempo = '"atempo={speed_factor}"'
+    os.system(f"ffmpeg -i -filter {atempo} {opus_file} {temp_audio_file}")
 
     # Load the WAV file
-    audio = AudioSegment.from_file(wav_file, format="wav")
+    audio = AudioSegment.from_file(temp_audio_file, format="wav")
 
     # Calculate the maximum start time to ensure the segment doesn't go beyond the audio length
     segment_length = min(segment_length, len(audio))
@@ -28,7 +29,7 @@ def chunk_random_segment(args):
 
     # Extract the segment
     segment = audio[start_time:start_time + segment_length]
-    segment = segment.speedup(playback_speed=speed_factor)
+    #segment = segment.speedup(playback_speed=speed_factor)
 
     # Export the segment to a temporary file (you can skip this step if you prefer not to save the segment)
     #temp_file = "temp_segment.wav"
@@ -38,7 +39,7 @@ def chunk_random_segment(args):
     #os.system("mplayer " + temp_file)
 
     # Clean up temporary files
-    os.remove(wav_file)
+    os.remove(temp_audio_file)
     #os.remove(temp_file)
 
 def my_function(argument):
@@ -72,7 +73,7 @@ def main():
     for fname in fnames:
         if fname.endswith('.opus'):
             length = random.randrange(10000, 30000) # random.uniform(0.75, 4.25) * 1000
-            speed_factor = random.randrange(500, 2000) / 1000 # random.uniform(0.75, 4.25) * 1000
+            speed_factor = random.randrange(1000, 2000) / 1000 # random.uniform(0.75, 4.25) * 1000
             title = os.path.splitext(fname)[0]
             it = (fname, length, speed_factor, os.path.join(outdir, str(i) + '_' + title + '.mp3'))
             i += 1
